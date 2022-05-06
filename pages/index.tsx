@@ -34,64 +34,6 @@ useEffect(() =>{
 
 }, []);
 
-  // useEffect(() => {
-
-  //   const fetchUser = async () => {
-  //     await fetch("http://localhost:8080/api/authenticate", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({
-  //         jwt: localStorage.getItem("token")
-  //       }),
-  //     }).then((res) => {
-  //        res.json().then((data) => {
-  //         setUser(data.user)
-  //       })
-  //     });
-  //   }
-    
-  //   const token = async () => {    
-  //       try {
-  //         const token = localStorage.getItem("token");
-  
-  //         if (token && token !== undefined) {
-  //           //   setMessage(`Logged in successfully`);
-  //           setAuth(true);
-  //         }
-  //         // const response = await fetch("http://localhost:8000/api/user", {
-  //         //   credentials: "include",
-  //         // });
-  
-  //         // const content = await response.json();
-  //         // setMessage(`Hi ${content.name}`);
-  //         // setAuth(true);
-  //       } catch (e) {
-  //         console.log(e);
-  //       }
-  //   }
-  //   fetchUser();
-  //   token();
-  //   // (async () => {
-  //   //   try {
-  //   //     const token = localStorage.getItem("token");
-
-  //   //     if (token && token !== undefined) {
-  //   //       //   setMessage(`Logged in successfully`);
-  //   //       setAuth(true);
-  //   //     }
-  //   //     // const response = await fetch("http://localhost:8000/api/user", {
-  //   //     //   credentials: "include",
-  //   //     // });
-
-  //   //     // const content = await response.json();
-  //   //     // setMessage(`Hi ${content.name}`);
-  //   //     // setAuth(true);
-  //   //   } catch (e) {
-  //   //     console.log(e);
-  //   //   }
-  //   // })();
-  // });
-
   return (
     <Layout auth={auth}>
       <style>{css}</style>
