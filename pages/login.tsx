@@ -6,22 +6,38 @@ import { useRouter } from "next/router";
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+
   const router = useRouter();
 
   const submit = async (e: SyntheticEvent) => {
     e.preventDefault();
 
-    await fetch("http://localhost:8080/login", {
+    await fetch("http://localhost:8080/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         userName: username,
         password,
       }),
+    }).then((res) => {
+      res.json().then((data) => {
+        console.log(data.jwt);
+        if (data.jwt && data.jwt !== undefined) {
+          localStorage.setItem("token", data.jwt);
+          router.push("/");
+        } else {
+          setMessage("Incorrect username or password.");
+        }
+      });
     });
-
-    await router.push("/");
   };
+
+  const css = `
+    .reminder {
+       color: red;
+    }
+`;
 
   return (
     <Layout>
@@ -46,6 +62,11 @@ const Login = () => {
         <button className="w-100 btn btn-lg btn-primary" type="submit">
           Sign in
         </button>
+
+        <span className="reminder">
+          <style>{css}</style>
+          {message}
+        </span>
       </form>
     </Layout>
   );

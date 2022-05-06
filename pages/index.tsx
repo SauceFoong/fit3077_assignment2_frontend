@@ -1,33 +1,31 @@
 import Layout from "../layouts/Layout";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
-    const [message, setMessage] = useState('');
-    const [auth, setAuth] = useState(false);
+  const [message, setMessage] = useState("");
+  const [auth, setAuth] = useState(false);
 
-    useEffect(() => {
-        (
-            async () => {
-                try {
-                    const response = await fetch('http://localhost:8000/api/user', {
-                        credentials: 'include',
-                    });
+  useEffect(() => {
+    (async () => {
+      try {
+        const token = localStorage.getItem("token");
 
-                    const content = await response.json();
+        if (token && token !== undefined) {
+          setMessage(`Logged in successfully`);
+          setAuth(true);
+        }
+        // const response = await fetch("http://localhost:8000/api/user", {
+        //   credentials: "include",
+        // });
 
-                    setMessage(`Hi ${content.name}`);
-                    setAuth(true);
-                } catch (e) {
-                    setMessage('You are not logged in');
-                    setAuth(false);
-                }
-            }
-        )();
-    });
+        // const content = await response.json();
+        // setMessage(`Hi ${content.name}`);
+        // setAuth(true);
+      } catch (e) {
+        console.log(e);
+      }
+    })();
+  });
 
-    return (
-        <Layout auth={auth}>
-            {message}
-        </Layout>
-    )
+  return <Layout auth={auth}>{message}</Layout>;
 }
