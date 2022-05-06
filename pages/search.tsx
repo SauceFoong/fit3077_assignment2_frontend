@@ -2,7 +2,6 @@ import Layout from "../layouts/Layout";
 import { useEffect, useState } from "react";
 
 export default function search() {
-  const [message, setMessage] = useState("");
   const [auth, setAuth] = useState(false);
   const [testingSites, setTestingSites] = useState([]);
 
@@ -10,6 +9,8 @@ export default function search() {
     #search-btn {
        margin-bottom: 20px;
        font-size: 10px;
+       float: right;
+       margin-top:20px;
     }
 
     .card {
@@ -31,12 +32,6 @@ export default function search() {
   const handleSubmit = async (event) => {
     // Stop the form from submitting and refreshing the page.
     event.preventDefault();
-    console.log(event.target.suburb.value);
-    console.log(event.target.facilityType.value);
-    console.log(event.target.onSiteBooking.checked);
-    console.log(event.target.onSiteTesting.checked);
-    console.log(event.target.open.checked);
-    console.log(event.target.waitTime.value);
 
     const data = {
       suburb: event.target.suburb.value,
@@ -53,7 +48,6 @@ export default function search() {
       body: JSON.stringify(data),
     }).then((res) => {
       res.json().then((data) => {
-        console.log(data);
         setTestingSites(data.testingSites);
       });
     });
@@ -64,17 +58,9 @@ export default function search() {
       try {
         const token = localStorage.getItem("token");
 
-        // if (token && token !== undefined) {
-        //   //   setMessage(`Logged in successfully`);
-        //   setAuth(true);
-        // }
-        // const response = await fetch("http://localhost:8000/api/user", {
-        //   credentials: "include",
-        // });
-
-        // const content = await response.json();
-        // setMessage(`Hi ${content.name}`);
-        // setAuth(true);
+        if (token && token !== undefined) {
+          setAuth(true);
+        }
       } catch (e) {
         console.log(e);
       }
