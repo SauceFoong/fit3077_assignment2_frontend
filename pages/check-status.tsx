@@ -3,10 +3,11 @@ import Layout from "../layouts/Layout";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
-const HomeBooking = () => {
-  const [checked, setChecked] = useState(false);
+const CheckStatus = () => {
+  const [pinCode, setPinCode] = useState("");
   const [patientId, setPatientId] = useState("");
   const [message, setMessage] = useState("");
+  const [status, setStatus] = useState("");
   const [auth, setAuth] = useState(false);
 
   const router = useRouter();
@@ -33,27 +34,20 @@ const HomeBooking = () => {
 
   const submit = async (e: SyntheticEvent) => {
     e.preventDefault();
-
-    await fetch("http://localhost:8080/api/v1/home_booking", {
-      method: "POST",
+    await fetch("http://localhost:8080/api/v1/booking_info/" + pinCode, {
+      method: "GET",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ratTestKit: checked,
-        customerId: patientId,
-        startTime: new Date().toISOString()
-      }),
     }).then((res) => {
       res.json().then((data) => {
-        console.log(data.id);
-        if (data.id != undefined) {
-          if (checked){
-            router.push({pathname:"/successful-home-booking", query:{url: data.additionalInfo["URL"], pinCode: data.smsPin}})
-          } else{
-            router.push({pathname:"/successful-home-booking", query:{url: data.additionalInfo["URL"], qrCode: data.additionalInfo["QRCode"],pinCode: data.smsPin}})
-          }
-          
+        console.log(data)
+        if (data.length == 0){
+            setMessage("Incorrect PIN CODE.");
+        }
+        else if (data[0].id != undefined) {
+          setStatus(data[0].status)
+          setMessage("")
         } else {
-          setMessage("Incorrect username or password.");
+          setMessage("Incorrect QR CODE.");
         }
       });
     });
@@ -67,18 +61,30 @@ const HomeBooking = () => {
 
   return (
     <Layout auth={auth}>
-      <form onSubmit={submit}>
-        <h1 className="h3 mb-3 fw-normal">Home Testing Booking</h1>
-        <input type="checkbox" id="rat_test_kit" name="rat_test_kit" onChange={(e) => setChecked(e.target.checked)}>
-        </input>
-        <label htmlFor="rat_test_kit">Have RAT test kit</label><br></br>
-
+        <h1>Check Booking Status</h1>
+        <form onSubmit={submit}>
+        <input
+          type="text"
+          className="form-control"
+          placeholder="PIN Code"
+          required
+          onChange={(e) => setPinCode(e.target.value)}
+        />
         <button className="w-100 btn btn-lg btn-primary" type="submit">
-          Book Now
+          Check
         </button>
-      </form>
+        </form>
+        <span className="reminder">
+          <style>{css}</style>
+          {message}
+        </span>
+        <br></br>
+        {status != "" ? <span className="reminder">
+          <style>{css}</style>
+          Booking Status: {status}
+        </span> : <></>}
     </Layout>
   );
 };
 
-export default HomeBooking;
+export default CheckStatus;

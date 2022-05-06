@@ -3,8 +3,8 @@ import Layout from "../layouts/Layout";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
-const HomeBooking = () => {
-  const [checked, setChecked] = useState(false);
+const ScanQRCode = () => {
+  const [qrCode, setQRCode] = useState("");
   const [patientId, setPatientId] = useState("");
   const [message, setMessage] = useState("");
   const [auth, setAuth] = useState(false);
@@ -33,27 +33,23 @@ const HomeBooking = () => {
 
   const submit = async (e: SyntheticEvent) => {
     e.preventDefault();
-
-    await fetch("http://localhost:8080/api/v1/home_booking", {
+    console.log(patientId)
+    console.log(qrCode)
+    await fetch("http://localhost:8080/api/v1/get-covid-test-kit", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        ratTestKit: checked,
-        customerId: patientId,
-        startTime: new Date().toISOString()
+        patientId: patientId, 
+        QRCode: qrCode,
       }),
     }).then((res) => {
       res.json().then((data) => {
         console.log(data.id);
         if (data.id != undefined) {
-          if (checked){
-            router.push({pathname:"/successful-home-booking", query:{url: data.additionalInfo["URL"], pinCode: data.smsPin}})
-          } else{
-            router.push({pathname:"/successful-home-booking", query:{url: data.additionalInfo["URL"], qrCode: data.additionalInfo["QRCode"],pinCode: data.smsPin}})
-          }
+          router.push('successful-verify-user')
           
         } else {
-          setMessage("Incorrect username or password.");
+          setMessage("Incorrect QR CODE.");
         }
       });
     });
@@ -67,18 +63,25 @@ const HomeBooking = () => {
 
   return (
     <Layout auth={auth}>
-      <form onSubmit={submit}>
-        <h1 className="h3 mb-3 fw-normal">Home Testing Booking</h1>
-        <input type="checkbox" id="rat_test_kit" name="rat_test_kit" onChange={(e) => setChecked(e.target.checked)}>
-        </input>
-        <label htmlFor="rat_test_kit">Have RAT test kit</label><br></br>
-
+        <h1>Scan User QR Code</h1>
+        <form onSubmit={submit}>
+        <input
+          type="text"
+          className="form-control"
+          placeholder="QR Code"
+          required
+          onChange={(e) => setQRCode(e.target.value)}
+        />
         <button className="w-100 btn btn-lg btn-primary" type="submit">
-          Book Now
+          Scan
         </button>
-      </form>
+        </form>
+        <span className="reminder">
+          <style>{css}</style>
+          {message}
+        </span>
     </Layout>
   );
 };
 
-export default HomeBooking;
+export default ScanQRCode;
