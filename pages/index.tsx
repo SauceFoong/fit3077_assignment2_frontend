@@ -6,6 +6,7 @@ export default function Home() {
   const [message, setMessage] = useState("");
   const [auth, setAuth] = useState(false);
   const [user, setUser] = useState(undefined);
+
   const css = `
     #index-btn {
        margin-bottom: 20px;
@@ -104,13 +105,15 @@ useEffect(() =>{
           Search Testing Sites
         </button>
       </Link>
-      <button
-        className="w-100 btn btn-lg btn-primary"
-        type="submit"
-        id="index-btn"
-      >
-        OnSite Testing
-      </button>
+      <Link href="/onSiteTesting">
+        <button
+          className="w-100 btn btn-lg btn-primary"
+          type="submit"
+          id="index-btn"
+        >
+          OnSite Testing
+        </button>
+      </Link>
       {user!=undefined && !user["customer"] ? <Link href="/on-site-booking">
         <button
           className="w-100 btn btn-lg btn-primary"
@@ -147,7 +150,6 @@ useEffect(() =>{
           Check Status
         </button>
       </Link>
-
     </Layout>
   );
 }
