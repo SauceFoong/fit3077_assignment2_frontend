@@ -5,7 +5,7 @@ export default function search() {
   const [message, setMessage] = useState("");
   const [auth, setAuth] = useState(false);
   const css = `
-    #index-btn {
+    #search-btn {
        margin-bottom: 20px;
        font-size: 10px;
     }
@@ -38,10 +38,9 @@ export default function search() {
       <style>{css}</style>
       {/* <span>{message}</span> */}
       <div className="row">
-        <div className="col-md-8">
-          <input type="text" className="w-100"></input>
-        </div>
-        <div className="col-md-4">
+        <form>
+          <input type="text" className="w-100" placeholder="suburb"></input>
+
           <button
             className="w-10 btn-lg btn-primary"
             type="submit"
@@ -49,7 +48,7 @@ export default function search() {
           >
             Search
           </button>
-        </div>
+        </form>
       </div>
     </Layout>
   );
