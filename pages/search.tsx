@@ -7,6 +7,7 @@ export default function search() {
   const css = `
     #index-btn {
        margin-bottom: 20px;
+       font-size: 10px;
     }
 `;
 
@@ -36,13 +37,20 @@ export default function search() {
     <Layout auth={auth}>
       <style>{css}</style>
       {/* <span>{message}</span> */}
-      <button
-        className="w-50 btn btn-lg btn-primary"
-        type="submit"
-        id="index-btn"
-      >
-        Search
-      </button>
+      <div className="row">
+        <div className="col-md-8">
+          <input type="text" className="w-100"></input>
+        </div>
+        <div className="col-md-4">
+          <button
+            className="w-10 btn-lg btn-primary"
+            type="submit"
+            id="search-btn"
+          >
+            Search
+          </button>
+        </div>
+      </div>
     </Layout>
   );
 }
