@@ -1,14 +1,12 @@
 import Layout from "../layouts/Layout";
 import { useEffect, useState } from "react";
-import Link from "next/link";
 
-export default function Home() {
+export default function search() {
   const [message, setMessage] = useState("");
   const [auth, setAuth] = useState(false);
   const css = `
     #index-btn {
        margin-bottom: 20px;
-       color: white;
     }
 `;
 
@@ -38,21 +36,12 @@ export default function Home() {
     <Layout auth={auth}>
       <style>{css}</style>
       {/* <span>{message}</span> */}
-      <Link href="/search">
-        <button
-          className="w-100 btn btn-lg btn-primary"
-          type="submit"
-          id="index-btn"
-        >
-          Search Testing Sites
-        </button>
-      </Link>
       <button
-        className="w-100 btn btn-lg btn-primary"
+        className="w-50 btn btn-lg btn-primary"
         type="submit"
         id="index-btn"
       >
-        OnSite Testing
+        Search
       </button>
     </Layout>
   );
