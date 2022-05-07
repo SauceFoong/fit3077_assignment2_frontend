@@ -56,7 +56,7 @@ useEffect(() =>{
           OnSite Testing
         </button>
       </Link>
-      {user!=undefined && !user["customer"] ? <Link href="/on-site-booking">
+      {user!=undefined && user["receptionist"] ? <Link href="/on-site-booking">
         <button
           className="w-100 btn btn-lg btn-primary"
           type="submit"
@@ -74,7 +74,7 @@ useEffect(() =>{
           Home Testing Booking
         </button>
       </Link> : <></>}
-      {user!=undefined && !user["customer"] ? <Link href="/scan-qr-code">
+      {user!=undefined && user["receptionist"] ? <Link href="/scan-qr-code">
         <button
           className="w-100 btn btn-lg btn-primary"
           type="submit"
