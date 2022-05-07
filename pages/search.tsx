@@ -138,22 +138,31 @@ export default function search() {
                     {testingSite.address.postcode}
                     {testingSite.address.state}{" "}
                   </p>
+                  Facility Type:
+                  <p>
+                    {testingSite.facilityType == 0
+                      ? "Drive Through"
+                      : testingSite.facilityType == 1
+                      ? "Walk-in"
+                      : testingSite.facilityType == 2
+                      ? "Clinic"
+                      : testingSite.facilityType == 3
+                      ? "GPs"
+                      : "Hospitals"}
+                  </p>
                   Operation Hour:
                   <p>
-                    {testingSite.additionalInfo.openTime} -{" "}
-                    {testingSite.additionalInfo.closeTime}{" "}
+                    {testingSite.openTime} - {testingSite.closeTime}{" "}
                   </p>
+                  Wait Time:
+                  <p>Within {testingSite.waitTime} minutes</p>
                   onSiteBooking:
                   <p>
-                    {testingSite.additionalInfo.onSiteBooking
-                      ? "Provided"
-                      : "Not provided"}
+                    {testingSite.onSiteBooking ? "Provided" : "Not provided"}
                   </p>
                   onSiteTesting:
                   <p>
-                    {testingSite.additionalInfo.onSiteTesting
-                      ? "Provided"
-                      : "Not provided"}
+                    {testingSite.onSiteTesting ? "Provided" : "Not provided"}
                   </p>
                 </div>
               </div>
