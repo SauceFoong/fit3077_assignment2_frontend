@@ -12,6 +12,7 @@ const HomeBooking = () => {
   const router = useRouter();
   
   useEffect(() =>{
+    console.log(localStorage.getItem("token"))
     const fetchUser = async () => {
       await fetch("http://localhost:8080/api/authenticate", {
         method: "POST",
