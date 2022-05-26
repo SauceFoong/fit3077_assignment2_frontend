@@ -6,6 +6,40 @@ import { useRouter } from "next/router";
 const Layout = (props) => {
   const router = useRouter();
 
+  const css = `
+
+  
+  .notification {
+    background-color: #555;
+    color: white;
+    padding: 10px 10px;
+    text-decoration: none;
+    position: relative;
+    display: inline-block;
+    margin-right: 10px;
+  }
+  
+  .notification:hover {
+    opacity: 0.8; 
+    text-decoration: none;
+    color: #fff;
+  }
+  
+  .notification .badge {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    border-radius: 50%;
+    background-color: red;
+    color: white;
+  }
+
+  .right {
+      right:0; 
+      display: flex; 
+  }
+`;
+
   const logout = async () => {
     localStorage.removeItem("token");
     // await fetch('http://localhost:8000/api/logout', {
@@ -51,6 +85,7 @@ const Layout = (props) => {
           crossOrigin="anonymous"
         />
       </Head>
+      <style>{css}</style>
 
       <nav className="navbar navbar-expand-md navbar-dark bg-dark mb-4">
         <div className="container-fluid">
@@ -58,7 +93,14 @@ const Layout = (props) => {
             <a className="navbar-brand">Home</a>
           </Link>
 
-          <div>{menu}</div>
+          <div className="right">
+            <a href="#" className="notification">
+              <span>Notifications</span>
+              <span className="badge">3</span>
+            </a>
+
+            <div>{menu}</div>
+          </div>
         </div>
       </nav>
 
