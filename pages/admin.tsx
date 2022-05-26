@@ -1,5 +1,6 @@
 import React, { SyntheticEvent, useEffect, useState } from "react";
 import Layout from "../layouts/Layout";
+import Modal from "../layouts/Modal";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
@@ -9,8 +10,7 @@ const Admin = () => {
   const [auth, setAuth] = useState(false);
   const [bookings, setBookings] = useState([]);
   const [notifications, setNotifications] = useState([]);
-  const [userId, setUserId] = useState("");
-
+  const [showModal, setShowModal] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const Admin = () => {
 
       const json = await response.json();
 
-      setUserId(json.user.id);
+      //   setUserId(json.user.id);
       setInterval(() => {
         fetchNotifications(json.user.id);
       }, 1000);
@@ -68,30 +68,6 @@ const Admin = () => {
 
   const submit = async (e: SyntheticEvent) => {
     e.preventDefault();
-
-    // await fetch("http://localhost:8080/api/v1/home_booking", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({
-    //     ratTestKit: checked,
-    //     customerId: patientId,
-    //     startTime: new Date().toISOString()
-    //   }),
-    // }).then((res) => {
-    //   res.json().then((data) => {
-    //     console.log(data.id);
-    //     if (data.id != undefined) {
-    //       if (checked){
-    //         router.push({pathname:"/successful-home-booking", query:{url: data.additionalInfo["URL"], pinCode: data.smsPin}})
-    //       } else{
-    //         router.push({pathname:"/successful-home-booking", query:{url: data.additionalInfo["URL"], qrCode: data.additionalInfo["QRCode"],pinCode: data.smsPin}})
-    //       }
-
-    //     } else {
-    //       setMessage("Incorrect username or password.");
-    //     }
-    //   });
-    // });
   };
 
   const deleteBooking = async (bookingId: string) => {
@@ -103,7 +79,6 @@ const Admin = () => {
     //   .then((res) => console.log(res));
     await fetch("http://localhost:8080/api/v1/delete_booking/" + bookingId, {
       method: "DELETE",
-      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         jwt: localStorage.getItem("token"),
       }),
@@ -159,7 +134,8 @@ const Admin = () => {
         <th>{"Customer Name"}</th>
         <th>{"Phone Number"}</th>
         <th>{"Status"}</th>
-        <th>{"Actions"}</th>
+        <th>{""}</th>
+        <th>{""}</th>
 
         {bookings.map((booking) => {
           return (
@@ -174,6 +150,9 @@ const Admin = () => {
                 <button onClick={async () => await deleteBooking(booking.id)}>
                   Delete
                 </button>
+              </td>
+              <td>
+                <button onClick={() => setShowModal(true)}>Update</button>
               </td>
             </tr>
           );
