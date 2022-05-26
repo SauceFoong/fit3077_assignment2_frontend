@@ -9,8 +9,69 @@ const OnSiteBooking = () => {
   const [message, setMessage] = useState("");
   const [auth, setAuth] = useState(false);
   const [notes, setNotes] = useState("");
+  const [testingSite, setTestingSite] = useState([]);
 
+
+    const css = `
+    #search-btn {
+       margin-bottom: 20px;
+       font-size: 10px;
+       float: right;
+       margin-top:20px;
+    }
+
+    .card {
+      box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+      transition: 0.3s;
+      width: 100%;
+      font-size: 10px;
+    }
+    
+    .card:hover {
+      box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      padding: 2px 16px;
+    }
+
+    .reminder {
+      color: red;
+   }
+`;
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+        console.log("FETCHING USER")
+        await fetch("http://localhost:8080/api/authenticate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            jwt: localStorage.getItem("token")
+          }),
+        }).then((res) => {
+           res.json().then(async (data) => {
+            // setCustomerId(data.user["id"])
+            setAuth(true)
+          })
+        });
+      } 
+
+    const fetchTestingSite = async () => {
+        await fetch("https://fit3077.com/api/v2/testing-site", {
+            method: "GET", 
+            headers: {"Content-Type": "application/json", "Authorization": "Mtgh9G66WzMHcJf8NGcGmmDtjWmW96"},
+        }).then((res) => {
+            res.json().then((data) => {
+                setTestingSite(data);
+            })
+        });
+    }
+    fetchUser();
+    console.log("FETCH TESTING SITE");
+    fetchTestingSite();
+}, []);
   
 //   useEffect(() =>{
 //     const fetchUser = async () => {
@@ -32,16 +93,18 @@ const OnSiteBooking = () => {
 
 //   }, []);
 
-  const submit = async (e: SyntheticEvent) => {
+  const submit = async (e) => {
     e.preventDefault();
     if (notes == "") {
         var requestBody = JSON.stringify({
             userName: userName,
+            testingSiteId: e.target.testingSite.value,
             startTime: new Date().toISOString(),
           })
     } else{
         var requestBody = JSON.stringify({
             userName: userName,
+            testingSiteId: e.target.testingSite.value,
             startTime: new Date().toISOString(),
             notes: notes,
           })
@@ -63,12 +126,6 @@ const OnSiteBooking = () => {
     });
   };
 
-  const css = `
-    .reminder {
-       color: red;
-    }
-`;
-
   return (
     <Layout auth={auth}>
       <form onSubmit={submit}>
@@ -80,6 +137,20 @@ const OnSiteBooking = () => {
           required
           onChange={(e) => setUserName(e.target.value)}
         />
+        <br />
+        <select className="w-100" name="testingSite">
+                {
+                    testingSite.map((site) => {
+                        return (
+                            <option value={site["id"]}>{site["name"]}</option>
+                        )
+                    })
+                }
+            </select>
+          <div>
+            <br />
+          </div>
+
         <input
           type="text"
           className="form-control"
