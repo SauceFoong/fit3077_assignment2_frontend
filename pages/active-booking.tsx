@@ -1,6 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import Layout from "../layouts/Layout";
+import Router from 'next/router'
 
 export default function ActiveBooking() {
     const [message, setMessage] = useState("")
@@ -9,6 +10,7 @@ export default function ActiveBooking() {
     const [activeBooking, setBooking] = useState([]);
     const [customerId, setCustomerId] = useState("");
     const [clicked, setClicked] = useState(false);
+
     const css = `
     #search-btn {
        margin-bottom: 20px;
@@ -119,6 +121,21 @@ export default function ActiveBooking() {
 
     }
 
+    const cancelBooking = async (event) => {
+        event.preventDefault();
+        console.log("Cancel Booking");
+        await fetch("http://localhost:8080/api/cancel_booking/" + activeBooking[0]["id"], {
+            method: "POST", 
+            headers: {'Content-Type': 'application/json'},
+        }).then((res) => {
+            res.json().then((data)=>{
+                if (data.message == "Successfully cancel booking.") {
+                    Router.reload();
+                }
+            })
+        })
+    }
+
     return (
         <Layout auth={auth}>
             <style>{css}</style>
@@ -127,7 +144,11 @@ export default function ActiveBooking() {
                     Current Active Booking <br />
                 </h4>
             </div>
-            <br /> 
+            {
+            activeBooking.length != 0 ? 
+            activeBooking[0]["status"] === "CANCELED" ? <div>No Active Booking</div> : 
+                
+            <div>
             {activeBooking.length != 0 ? 
             <div>
             <div className="row">
@@ -135,9 +156,16 @@ export default function ActiveBooking() {
             </div>
             <div className="row">
                 DateTime: {activeBooking[0]["startTime"]} <br />
-            </div> </div>:<></>}<br />
+            </div> </div>:<></>
+            }
+            <br />
             <button className="w-100 btn btn-lg btn-primary" onClick={(e) => setClicked(!clicked)}>
                 Modify Booking
+            </button>
+            <br /> 
+            <div><br /></div>
+            <button className="w-100 btn btn-lg btn-primary" onClick={cancelBooking}>
+                Cancel Booking
             </button>
             <br /> 
             <br /> 
@@ -195,6 +223,85 @@ export default function ActiveBooking() {
         </form>
         : <></>
             }
+
+            </div>
+            : <div></div>
+            }
+            {/* <br /> 
+            {activeBooking.length != 0 ? 
+            <div>
+            <div className="row">
+                Venue: {activeBooking[0]["testingSite"]["name"]} <br />
+            </div>
+            <div className="row">
+                DateTime: {activeBooking[0]["startTime"]} <br />
+            </div> </div>:<></>
+            }
+            <br />
+            <button className="w-100 btn btn-lg btn-primary" onClick={(e) => setClicked(!clicked)}>
+                Modify Booking
+            </button>
+            <br /> 
+            <div><br /></div>
+            <button className="w-100 btn btn-lg btn-primary" onClick={cancelBooking}>
+                Cancel Booking
+            </button>
+            <br /> 
+            <br /> 
+            {clicked ? 
+            <form onSubmit = {handleSubmit}>
+            <div>Select Venue and Time</div>
+            <div className="row">
+            <select className="w-100" name="testingSite">
+                <option value = {"None"}>---</option>
+                {
+                    testingSite.map((site) => {
+                        return (
+                            <option value={site["id"]}>{site["name"]}</option>
+                        )
+                    })
+                }
+            </select>
+            <br/>
+            <div>
+                <br></br>
+            </div>
+            <input type="datetime-local" id="startTime" name="startTime"></input>
+            <div>
+                <br></br>
+            </div>
+            <div>Select From Previous Changes</div>
+            <select className="w-100" name="previousRecord">
+                <option value = {"None"}>---</option>
+            {   
+                'pastChanges' in activeBooking[0]["customer"]["additionalInfo"] ? 
+                activeBooking[0]["customer"]["additionalInfo"]["pastChanges"].map((changes) => {
+                    const data = {
+                        testingSiteId: changes["testingSiteId"],
+                        startTime: changes["startTime"]
+                    }
+                    return (
+                        <option value={JSON.stringify(data)}>{changes["testingSiteName"] + ' --- '+ changes["startTime"]}</option>
+                    )
+                }) : <></>
+            }
+            </select>
+            <br />
+            <div>
+                <br />
+            </div>
+            
+        </div> 
+        <button
+            className="w-100 btn btn-lg btn-primary"
+            type="submit"
+            id="modify-btn"
+          >
+            Confirm Change
+          </button>
+        </form>
+        : <></> */}
+            {/* } */}
         </Layout>
     );
 }
