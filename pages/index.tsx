@@ -38,13 +38,22 @@ useEffect(() =>{
     <Layout auth={auth}>
       <style>{css}</style>
       {/* <span>{message}</span> */}
-      {user!=undefined && user["customer"] ? <Link href="/active-booking">
+      {user!=undefined && (user["customer"] || user["healthcare"])  ? <Link href="/active-booking">
         <button
           className="w-100 btn btn-lg btn-primary"
           type="submit"
           id="index-btn"
         >
         Current Active Booking
+        </button>
+      </Link> : <></>}
+      {user!=undefined && user["receptionist"] ? <Link href="/admin-panel">
+        <button
+          className="w-100 btn btn-lg btn-primary"
+          type="submit"
+          id="index-btn"
+        >
+        Admin Panel
         </button>
       </Link> : <></>}
       <Link href="/search">

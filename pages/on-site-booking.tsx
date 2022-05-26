@@ -43,7 +43,6 @@ const OnSiteBooking = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-        console.log("FETCHING USER")
         await fetch("http://localhost:8080/api/authenticate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
