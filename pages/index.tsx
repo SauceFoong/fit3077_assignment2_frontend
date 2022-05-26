@@ -14,48 +14,55 @@ export default function Home() {
     }
 `;
 
-useEffect(() =>{
-  const fetchUser = async () => {
-    await fetch("http://localhost:8080/api/authenticate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        jwt: localStorage.getItem("token")
-      }),
-    }).then((res) => {
-       res.json().then((data) => {
-        setUser(data.user)
-        setAuth(true)
-      })
-    });
-  }
+  useEffect(() => {
+    const fetchUser = async () => {
+      await fetch("http://localhost:8080/api/authenticate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          jwt: localStorage.getItem("token"),
+        }),
+      }).then((res) => {
+        res.json().then((data) => {
+          setUser(data.user);
+          setAuth(true);
+        });
+      });
+    };
 
-  fetchUser();
-
-}, []);
+    fetchUser();
+  }, []);
 
   return (
     <Layout auth={auth}>
       <style>{css}</style>
       {/* <span>{message}</span> */}
-      {user!=undefined && (user["customer"] || user["healthcare"])  ? <Link href="/active-booking">
-        <button
-          className="w-100 btn btn-lg btn-primary"
-          type="submit"
-          id="index-btn"
-        >
-        Current Active Booking
-        </button>
-      </Link> : <></>}
-      {user!=undefined && user["receptionist"] ? <Link href="/admin-panel">
-        <button
-          className="w-100 btn btn-lg btn-primary"
-          type="submit"
-          id="index-btn"
-        >
-        Admin Panel
-        </button>
-      </Link> : <></>}
+      {user != undefined && (user["customer"] || user["healthcare"]) ? (
+        <Link href="/active-booking">
+          <button
+            className="w-100 btn btn-lg btn-primary"
+            type="submit"
+            id="index-btn"
+          >
+            Current Active Booking
+          </button>
+        </Link>
+      ) : (
+        <></>
+      )}
+      {user != undefined && (user["receptionist"] || user["healthcare"]) ? (
+        <Link href="/admin">
+          <button
+            className="w-100 btn btn-lg btn-primary"
+            type="submit"
+            id="index-btn"
+          >
+            Admin Panel
+          </button>
+        </Link>
+      ) : (
+        <></>
+      )}
       <Link href="/search">
         <button
           className="w-100 btn btn-lg btn-primary"
@@ -74,35 +81,47 @@ useEffect(() =>{
           OnSite Testing
         </button>
       </Link>
-      {user!=undefined && user["receptionist"] ? <Link href="/on-site-booking">
-        <button
-          className="w-100 btn btn-lg btn-primary"
-          type="submit"
-          id="index-btn"
-        >
-          On Site Booking
-        </button>
-      </Link> : <></>}
-      {user!=undefined && user["customer"] ? <Link href="/booking">
-        <button
-          className="w-100 btn btn-lg btn-primary"
-          type="submit"
-          id="index-btn"
-        >
-          Home Testing Booking
-        </button>
-      </Link> : <></>}
-      {user!=undefined && user["receptionist"] ? <Link href="/scan-qr-code">
-        <button
-          className="w-100 btn btn-lg btn-primary"
-          type="submit"
-          id="index-btn"
-        >
-          Scan QR CODE
-        </button>
-      </Link> : <></>}
+      {user != undefined && user["receptionist"] ? (
+        <Link href="/on-site-booking">
+          <button
+            className="w-100 btn btn-lg btn-primary"
+            type="submit"
+            id="index-btn"
+          >
+            On Site Booking
+          </button>
+        </Link>
+      ) : (
+        <></>
+      )}
+      {user != undefined && user["customer"] ? (
+        <Link href="/booking">
+          <button
+            className="w-100 btn btn-lg btn-primary"
+            type="submit"
+            id="index-btn"
+          >
+            Home Testing Booking
+          </button>
+        </Link>
+      ) : (
+        <></>
+      )}
+      {user != undefined && user["receptionist"] ? (
+        <Link href="/scan-qr-code">
+          <button
+            className="w-100 btn btn-lg btn-primary"
+            type="submit"
+            id="index-btn"
+          >
+            Scan QR CODE
+          </button>
+        </Link>
+      ) : (
+        <></>
+      )}
       <Link href="/check-status">
-      <button
+        <button
           className="w-100 btn btn-lg btn-primary"
           type="submit"
           id="index-btn"

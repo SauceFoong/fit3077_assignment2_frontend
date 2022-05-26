@@ -11,8 +11,7 @@ const OnSiteBooking = () => {
   const [notes, setNotes] = useState("");
   const [testingSite, setTestingSite] = useState([]);
 
-
-    const css = `
+  const css = `
     #search-btn {
        margin-bottom: 20px;
        font-size: 10px;
@@ -43,72 +42,80 @@ const OnSiteBooking = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-        await fetch("http://localhost:8080/api/authenticate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            jwt: localStorage.getItem("token")
-          }),
-        }).then((res) => {
-           res.json().then(async (data) => {
-            // setCustomerId(data.user["id"])
-            setAuth(true)
-          })
+      await fetch("http://localhost:8080/api/authenticate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          jwt: localStorage.getItem("token"),
+        }),
+      }).then((res) => {
+        res.json().then(async (data) => {
+          // setCustomerId(data.user["id"])
+          setAuth(true);
         });
-      } 
+      });
+    };
 
     const fetchTestingSite = async () => {
-        await fetch("https://fit3077.com/api/v2/testing-site", {
-            method: "GET", 
-            headers: {"Content-Type": "application/json", "Authorization": "Mtgh9G66WzMHcJf8NGcGmmDtjWmW96"},
-        }).then((res) => {
-            res.json().then((data) => {
-                setTestingSite(data);
-            })
+      await fetch("https://fit3077.com/api/v2/testing-site", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Mtgh9G66WzMHcJf8NGcGmmDtjWmW96",
+        },
+      }).then((res) => {
+        res.json().then((data) => {
+          setTestingSite(data);
         });
-    }
+      });
+    };
     fetchUser();
     console.log("FETCH TESTING SITE");
     fetchTestingSite();
-}, []);
-  
-//   useEffect(() =>{
-//     const fetchUser = async () => {
-//       await fetch("http://localhost:8080/api/authenticate", {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({
-//           jwt: localStorage.getItem("token")
-//         }),
-//       }).then((res) => {
-//          res.json().then((data) => {
-//           setPatientId(data.user["id"])
-//           setAuth(true)
-//         })
-//       });
-//     }
+  }, []);
 
-//     fetchUser();
+  //   useEffect(() =>{
+  //     const fetchUser = async () => {
+  //       await fetch("http://localhost:8080/api/authenticate", {
+  //         method: "POST",
+  //         headers: { "Content-Type": "application/json" },
+  //         body: JSON.stringify({
+  //           jwt: localStorage.getItem("token")
+  //         }),
+  //       }).then((res) => {
+  //          res.json().then((data) => {
+  //           setPatientId(data.user["id"])
+  //           setAuth(true)
+  //         })
+  //       });
+  //     }
 
-//   }, []);
+  //     fetchUser();
+
+  //   }, []);
+
+  const twoDaysFromDate = (date: Date) => {
+    date.setDate(date.getDate() + 2);
+    return date.toISOString();
+  };
 
   const submit = async (e) => {
     e.preventDefault();
     if (notes == "") {
-        var requestBody = JSON.stringify({
-            userName: userName,
-            testingSiteId: e.target.testingSite.value,
-            startTime: new Date().toISOString(),
-          })
-    } else{
-        var requestBody = JSON.stringify({
-            userName: userName,
-            testingSiteId: e.target.testingSite.value,
-            startTime: new Date().toISOString(),
-            notes: notes,
-          })
+      var requestBody = JSON.stringify({
+        userName: userName,
+        testingSiteId: e.target.testingSite.value,
+        startTime: twoDaysFromDate(new Date()),
+      });
+    } else {
+      var requestBody = JSON.stringify({
+        userName: userName,
+        testingSiteId: e.target.testingSite.value,
+        startTime: twoDaysFromDate(new Date()),
+        notes: notes,
+      });
     }
-    
+
     await fetch("http://localhost:8080/api/v1/booking", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -117,7 +124,10 @@ const OnSiteBooking = () => {
       res.json().then((data) => {
         console.log(data.id);
         if (data.id != undefined) {
-        router.push({pathname:"/successful-booking", query:{pinCode: data.smsPin}})
+          router.push({
+            pathname: "/successful-booking",
+            query: { pinCode: data.smsPin },
+          });
         } else {
           setMessage("UserName invalid");
         }
@@ -138,23 +148,19 @@ const OnSiteBooking = () => {
         />
         <br />
         <select className="w-100" name="testingSite">
-                {
-                    testingSite.map((site) => {
-                        return (
-                            <option value={site["id"]}>{site["name"]}</option>
-                        )
-                    })
-                }
-            </select>
-          <div>
-            <br />
-          </div>
+          {testingSite.map((site) => {
+            return <option value={site["id"]}>{site["name"]}</option>;
+          })}
+        </select>
+        <div>
+          <br />
+        </div>
 
         <input
           type="text"
           className="form-control"
           placeholder="Note"
-        //   required
+          //   required
           onChange={(e) => setNotes(e.target.value)}
         />
         <button className="w-100 btn btn-lg btn-primary" type="submit">
@@ -162,9 +168,9 @@ const OnSiteBooking = () => {
         </button>
       </form>
       <span className="reminder">
-          <style>{css}</style>
-          {message}
-        </span>
+        <style>{css}</style>
+        {message}
+      </span>
     </Layout>
   );
 };

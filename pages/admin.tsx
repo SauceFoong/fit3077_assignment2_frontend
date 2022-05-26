@@ -1,8 +1,8 @@
 import React, { SyntheticEvent, useEffect, useState } from "react";
 import Layout from "../layouts/Layout";
-import Modal from "../layouts/Modal";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 const Admin = () => {
   const [checked, setChecked] = useState(false);
@@ -10,7 +10,8 @@ const Admin = () => {
   const [auth, setAuth] = useState(false);
   const [bookings, setBookings] = useState([]);
   const [notifications, setNotifications] = useState([]);
-  const [showModal, setShowModal] = useState(false);
+  const [user, setUser] = useState(undefined);
+
   const router = useRouter();
 
   useEffect(() => {
@@ -25,6 +26,14 @@ const Admin = () => {
 
       const json = await response.json();
 
+      if (
+        json.user.customer &&
+        !json.user.healthcare &&
+        !json.user.receptionist
+      ) {
+        router.push("/");
+      }
+      setUser(json.user.id);
       //   setUserId(json.user.id);
       setInterval(() => {
         fetchNotifications(json.user.id);
@@ -134,6 +143,10 @@ const Admin = () => {
         <th>{"Customer Name"}</th>
         <th>{"Phone Number"}</th>
         <th>{"Status"}</th>
+        <th>{"PIN"}</th>
+        <th>{"Start Time"}</th>
+        <th>{"Testing Site"}</th>
+
         <th>{""}</th>
         <th>{""}</th>
 
@@ -146,13 +159,26 @@ const Admin = () => {
               </td>
               <td>{booking.customer.phoneNumber}</td>
               <td>{booking.status}</td>
+              <td>{booking.smsPin}</td>
+              <td>{booking.startTime}</td>
+              <td>{booking.testingSite ? booking.testingSite.name : "None"}</td>
+
               <td>
                 <button onClick={async () => await deleteBooking(booking.id)}>
                   Delete
                 </button>
               </td>
               <td>
-                <button onClick={() => setShowModal(true)}>Update</button>
+                <Link
+                  href={{
+                    pathname: "/admin-edit",
+                    query: { pin: booking.smsPin },
+                  }}
+                >
+                  <button onClick={async () => await deleteBooking(booking.id)}>
+                    Update
+                  </button>
+                </Link>
               </td>
             </tr>
           );
