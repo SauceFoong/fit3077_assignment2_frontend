@@ -1,1 +1,1 @@
-self.__BUILD_MANIFEST = {__rewrites:[],"/_error":["static\u002Fchunks\u002Fpages\u002F_error.js"],"/active-booking":["static\u002Fchunks\u002Fpages\u002Factive-booking.js"],sortedPages:["\u002F_app","\u002F_error","\u002Factive-booking"]};self.__BUILD_MANIFEST_CB && self.__BUILD_MANIFEST_CB()
+self.__BUILD_MANIFEST = {__rewrites:[],"/_error":["static\u002Fchunks\u002Fpages\u002F_error.js"],"/admin-edit":["static\u002Fchunks\u002Fpages\u002Fadmin-edit.js"],sortedPages:["\u002F_app","\u002F_error","\u002Fadmin-edit"]};self.__BUILD_MANIFEST_CB && self.__BUILD_MANIFEST_CB()
