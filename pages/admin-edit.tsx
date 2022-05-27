@@ -3,7 +3,7 @@ import Layout from "../layouts/Layout";
 import Router from "next/router";
 import { useRouter } from "next/router";
 
-const AdminPanel = () => {
+const AdminEdit = () => {
   const [booking, setBooking] = useState([]);
   const [auth, setAuth] = useState(false);
   const [bookingId, setBookingId] = useState("");
@@ -136,6 +136,7 @@ const AdminPanel = () => {
       headers: { "Content-Type": "application/json" },
     }).then((res) => {
       res.json().then((data) => {
+        console.log(data, e.target.value);
         console.log("WTF", e.target.value, data);
         if (data.length == 0) {
           setMessage("Incorrect PIN CODE.");
@@ -153,7 +154,7 @@ const AdminPanel = () => {
   return (
     <Layout auth={auth}>
       <div>
-        <h4>Admin Panel - Change Booking</h4>
+        <h4>Admin Edit - Change Booking</h4>
         <br />
       </div>
       <form onSubmit={submit}>
@@ -300,4 +301,4 @@ const AdminPanel = () => {
   );
 };
 
-export default AdminPanel;
+export default AdminEdit;

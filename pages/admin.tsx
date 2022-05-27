@@ -60,7 +60,7 @@ const Admin = () => {
         headers: { "Content-Type": "application/json" },
       }).then((res) => {
         res.json().then((data) => {
-          console.log(data);
+          //   console.log(data);
           //   const arr = [];
           //   for (const unreadNoti of data.notifications) {
           //     if (unreadNoti.read == false) {
