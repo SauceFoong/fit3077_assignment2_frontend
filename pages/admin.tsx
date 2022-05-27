@@ -60,6 +60,7 @@ const Admin = () => {
         headers: { "Content-Type": "application/json" },
       }).then((res) => {
         res.json().then((data) => {
+          console.log(data);
           //   const arr = [];
           //   for (const unreadNoti of data.notifications) {
           //     if (unreadNoti.read == false) {
@@ -75,23 +76,29 @@ const Admin = () => {
     fetchBooking();
   }, []);
 
-  const submit = async (e: SyntheticEvent) => {
-    e.preventDefault();
+  const readNotification = async (notiId: string) => {
+    console.log(user, notiId);
+    const requestBody = {
+      userId: user,
+    };
+    await fetch("http://localhost:8080/api/read-notifications/" + notiId, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(requestBody),
+    }).then((res) => {
+      res.json().then((data) => {
+        console.log(data.id);
+      });
+    });
   };
 
   const deleteBooking = async (bookingId: string) => {
     console.log("Delete Booking", bookingId);
-    // await fetch("http://localhost:8080/api/v1/delete_booking/" + bookingId, {
-    //   method: "DELETE",
-    // })
-    //   .then((res) => res.text()) // or res.json()
-    //   .then((res) => console.log(res));
     await fetch("http://localhost:8080/api/v1/delete_booking/" + bookingId, {
       method: "DELETE",
-      body: JSON.stringify({
-        jwt: localStorage.getItem("token"),
-      }),
-    });
+    })
+      .then((res) => res.text()) // or res.json()
+      .then((res) => console.log(res));
   };
 
   const css = `
@@ -127,15 +134,27 @@ const Admin = () => {
   return (
     <Layout auth={auth}>
       <style>{css}</style>
+      <div>
+        <h4>Admin Panel</h4>
+
+        <br />
+      </div>
 
       {notifications &&
         notifications.map((notification) => {
-          return (
-            <div className="notificationBlock" key={notification.id}>
-              <span className="closebtn">&times;</span>
-              {notification.message}
-            </div>
-          );
+          if (!notification.read) {
+            return (
+              <div className="notificationBlock" key={notification.id}>
+                <span
+                  className="closebtn"
+                  onClick={() => readNotification(notification.id)}
+                >
+                  &times;
+                </span>
+                {notification.message}
+              </div>
+            );
+          }
         })}
 
       <table key={1}>
@@ -169,16 +188,22 @@ const Admin = () => {
                 </button>
               </td>
               <td>
-                <Link
-                  href={{
-                    pathname: "/admin-edit",
-                    query: { pin: booking.smsPin },
-                  }}
-                >
-                  <button onClick={async () => await deleteBooking(booking.id)}>
-                    Update
-                  </button>
-                </Link>
+                {booking.status != "CANCELLED" ? (
+                  <Link
+                    href={{
+                      pathname: "/admin-edit",
+                      query: { pin: booking.smsPin },
+                    }}
+                  >
+                    <button
+                      onClick={async () => await deleteBooking(booking.id)}
+                    >
+                      Update
+                    </button>
+                  </Link>
+                ) : (
+                  "Unable to Update"
+                )}
               </td>
             </tr>
           );

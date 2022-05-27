@@ -8,32 +8,6 @@ const Layout = (props) => {
 
   const css = `
 
-  
-  .notification {
-    background-color: #555;
-    color: white;
-    padding: 10px 10px;
-    text-decoration: none;
-    position: relative;
-    display: inline-block;
-    margin-right: 10px;
-  }
-  
-  .notification:hover {
-    opacity: 0.8; 
-    text-decoration: none;
-    color: #fff;
-  }
-  
-  .notification .badge {
-    position: absolute;
-    top: -5px;
-    right: -10px;
-    border-radius: 50%;
-    background-color: red;
-    color: white;
-  }
-
   .right {
       right:0; 
       display: flex; 
@@ -94,11 +68,6 @@ const Layout = (props) => {
           </Link>
 
           <div className="right">
-            <a href="#" className="notification">
-              <span>Notifications</span>
-              <span className="badge">3</span>
-            </a>
-
             <div>{menu}</div>
           </div>
         </div>
